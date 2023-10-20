@@ -7,12 +7,16 @@ type Props = {};
 
 function PromoItem({}: Props) {
   const [phone, setPhone] = useState<string>("");
+  const [isAgree, setIsAgree] = useState<boolean>(false);
   const handleChangeNumber = (target: string) => {
     if (target === "backspace") {
       setPhone((prev) => prev.slice(0, -1));
     } else {
       if (phone.length < 10) setPhone((prev) => prev + target);
     }
+  };
+  const handleChangeAgree = () => {
+    setIsAgree((prev) => !prev);
   };
   return (
     <div className=" flex justify-center items-center px-12 py-[72px] h-full">
@@ -21,7 +25,11 @@ function PromoItem({}: Props) {
         <PhoneInput phone={phone} />
         <span>и с Вами свяжется наш менеждер для дальнейшей консультации</span>
         <OnScreenKeyboard onChangeNumber={handleChangeNumber} />
-        <CustomCheckbox />
+        <CustomCheckbox
+          value={isAgree}
+          label={"Согласие на обработку персональных данных"}
+          onChange={handleChangeAgree}
+        />
         <button
           className="col-span-2 uppercase border-2 border-black  px-5 py-3 disabled:text-[#4E4E4E] disabled:border-[#4E4E4E] duration-300"
           disabled={phone.length < 10}

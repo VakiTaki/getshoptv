@@ -30,7 +30,7 @@ function Promo({ isShow, setIsShowPromo }: Props) {
         </div>
         <div
           className={
-            " absolute  bottom-[40px] w-[300px]  transition-all duration-1000 cursor-pointer   " +
+            " absolute  bottom-[40px] w-[300px]  transition-all duration-1000   " +
             (isShow ? " right-[40px] " : " -right-[200%] invisible ")
           }
         >
