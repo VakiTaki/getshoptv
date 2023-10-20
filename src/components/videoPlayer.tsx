@@ -17,9 +17,7 @@ function VideoPlayer() {
     playerRef.current = event.target;
     setIsLoaded(true);
   };
-  const onStateChange: YouTubeProps["onStateChange"] = (event) => {
-    console.log(playerRef.current.getVolume());
-  };
+  const onStateChange: YouTubeProps["onStateChange"] = (event) => {};
 
   const playVideo = () => {
     console.log("play");
@@ -58,7 +56,8 @@ function VideoPlayer() {
         opts={opts}
         onReady={onReady}
         onStateChange={onStateChange}
-        //   onPause={playVideo}
+        onPause={playVideo}
+        onEnd={playVideo}
       />
       {isLoaded && (
         <>
