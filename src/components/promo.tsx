@@ -4,7 +4,6 @@ import qr from "../images/qr.svg";
 type Props = { isShow: boolean; setIsShowPromo: (b: boolean) => void };
 
 function Promo({ isShow, setIsShowPromo }: Props) {
-  console.log(isShow);
   const handleClose = () => {
     setIsShowPromo(false);
   };
