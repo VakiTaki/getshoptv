@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import banner from "../images/banner.svg";
-import { start } from "repl";
 
 type Props = { isShow: boolean; setIsShowPromo: (b: boolean) => void };
 

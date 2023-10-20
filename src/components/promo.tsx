@@ -1,5 +1,6 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import qr from "../images/qr.svg";
+import PromoItem from "./promoItem";
 
 type Props = { isShow: boolean; setIsShowPromo: (b: boolean) => void };
 
@@ -16,7 +17,7 @@ function Promo({ isShow, setIsShowPromo }: Props) {
             (isShow ? " left-0 " : " -left-[200%] invisible  ")
           }
         >
-          Promo
+          <PromoItem />
         </div>
         <div
           className={
