@@ -1,12 +1,17 @@
 import { CheckIcon } from "@heroicons/react/24/solid";
 import React from "react";
 
-type Props = { value: boolean; label: string; onChange: () => void };
+type Props = {
+  value: boolean;
+  label: string;
+  onChange: () => void;
+  isActive: boolean;
+};
 
-function CustomCheckbox({ value, label, onChange }: Props) {
+function CustomCheckbox({ value, label, onChange, isActive }: Props) {
   return (
-    <div className="flex   items-center justify-center gap-1 w-full">
-      <div className="inline-flex items-center">
+    <div className="flex   items-center justify-center gap-1 w-full ">
+      <div className="inline-flex items-center ">
         <label
           className="relative flex cursor-pointer items-center rounded-full"
           data-ripple-dark="true"
@@ -22,7 +27,14 @@ function CustomCheckbox({ value, label, onChange }: Props) {
           </div>
         </label>
       </div>
-      <span className=" ml-2  text-sm   text-[#565656] text-left">{label}</span>
+      <span
+        className={
+          " ml-2  text-sm    text-left" +
+          (isActive ? " text-black" : " text-[#565656]")
+        }
+      >
+        {label}
+      </span>
     </div>
   );
 }

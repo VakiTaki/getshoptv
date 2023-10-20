@@ -3,9 +3,9 @@ import OnScreenKeyboard from "./keyboard/onScreenKeyboard";
 import PhoneInput from "./phoneInput";
 import CustomCheckbox from "./ui/form /customCheckbox";
 
-type Props = {};
+type Props = { activeIndex: number };
 
-function PromoItem({}: Props) {
+function PromoItem({ activeIndex }: Props) {
   const [phone, setPhone] = useState<string>("");
   const [isAgree, setIsAgree] = useState<boolean>(false);
   const handleChangeNumber = (target: string) => {
@@ -19,21 +19,27 @@ function PromoItem({}: Props) {
     setIsAgree((prev) => !prev);
   };
   const isValidate = isAgree && phone.length === 10;
-  console.log(isValidate);
   return (
     <div className=" flex justify-center items-center px-12 py-[72px] h-full">
       <div className=" flex flex-col justify-between items-center text-center h-full">
         <h2>Введите ваш номер мобильного телефона</h2>
         <PhoneInput phone={phone} />
         <span>и с Вами свяжется наш менеждер для дальнейшей консультации</span>
-        <OnScreenKeyboard onChangeNumber={handleChangeNumber} />
+        <OnScreenKeyboard
+          onChangeNumber={handleChangeNumber}
+          activeIndex={activeIndex}
+        />
         <CustomCheckbox
           value={isAgree}
           label={"Согласие на обработку персональных данных"}
           onChange={handleChangeAgree}
+          isActive={activeIndex === 11}
         />
         <button
-          className="col-span-2 uppercase border-2 border-black  px-5 py-3 disabled:text-[#4E4E4E] disabled:border-[#4E4E4E] duration-300"
+          className={
+            "col-span-2 uppercase border-2 border-black  px-5 py-3 disabled:text-[#4E4E4E] disabled:border-[#4E4E4E] duration-300" +
+            (activeIndex === 12 ? " active_button" : " ")
+          }
           disabled={!isValidate}
         >
           Подтвердить номер

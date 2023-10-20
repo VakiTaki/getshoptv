@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import qr from "../images/qr.svg";
 import PromoItem from "./promoItem";
@@ -5,6 +6,27 @@ import PromoItem from "./promoItem";
 type Props = { isShow: boolean; setIsShowPromo: (b: boolean) => void };
 
 function Promo({ isShow, setIsShowPromo }: Props) {
+  const buttonsCount = 14;
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  console.log(activeIndex);
+  const handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === "ArrowLeft" && activeIndex > 0) {
+      setActiveIndex(activeIndex - 1); // Переключение на предыдущую клавишу при нажатии влево
+    } else if (event.key === "ArrowRight" && activeIndex < buttonsCount - 1) {
+      setActiveIndex(activeIndex + 1); // Переключение на следующую клавишу при нажатии вправо
+    } else if (event.key === "ArrowUp" && activeIndex > 0) {
+      setActiveIndex(activeIndex - 3);
+    } else if (event.key === "ArrowDown" && activeIndex < buttonsCount - 1) {
+      setActiveIndex(activeIndex + 3);
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [activeIndex]);
   const handleClose = () => {
     setIsShowPromo(false);
   };
@@ -17,12 +39,13 @@ function Promo({ isShow, setIsShowPromo }: Props) {
             (isShow ? " left-0 " : " -left-[200%] invisible  ")
           }
         >
-          <PromoItem />
+          <PromoItem activeIndex={activeIndex} />
         </div>
         <div
           className={
-            " absolute  right-0 bg-white w-[88px] h-[52px] mt-5 mr-5 flex justify-center items-center hover:opacity-70  shadow-md transition-all duration-1000 " +
-            (isShow ? " top-0 " : " -top-[200%] invisible  ")
+            " absolute  right-0 bg-white w-[88px] h-[52px] mt-5 mr-5 flex justify-center items-center hover:opacity-70  shadow-md transition-all duration-1000  " +
+            (isShow ? " top-0 " : " -top-[200%] invisible  ") +
+            (activeIndex === 13 ? " active_button " : " ")
           }
           onClick={handleClose}
         >

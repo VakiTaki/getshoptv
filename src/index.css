@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.active_button {
+  @apply !bg-black !text-white fill-white;
+}
