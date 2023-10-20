@@ -1,12 +1,11 @@
-import { XMarkIcon } from "@heroicons/react/24/solid";
+import { CheckIcon } from "@heroicons/react/24/solid";
 import React from "react";
 
 type Props = { value: boolean; label: string; onChange: () => void };
 
 function CustomCheckbox({ value, label, onChange }: Props) {
-  console.log(value);
   return (
-    <div className="flex  items-center gap-1">
+    <div className="flex   items-center justify-center gap-1 w-full">
       <div className="inline-flex items-center">
         <label
           className="relative flex cursor-pointer items-center rounded-full"
@@ -18,12 +17,12 @@ function CustomCheckbox({ value, label, onChange }: Props) {
             checked={value}
             onChange={onChange}
           />
-          {/* <div className="pointer-events-none w-2 h-2 absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-black bg-black opacity-0 transition-opacity peer-checked:opacity-100">1</div> */}
+          <div className="pointer-events-none w-10 h-10 absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-black  opacity-0 transition-opacity peer-checked:opacity-100">
+            <CheckIcon className=" w-10 h-10" />
+          </div>
         </label>
       </div>
-      <span className=" ml-2 text=[14px] font-normal leading-5 text-text-primary ">
-        {label}
-      </span>
+      <span className=" ml-2  text-sm   text-[#565656] text-left">{label}</span>
     </div>
   );
 }

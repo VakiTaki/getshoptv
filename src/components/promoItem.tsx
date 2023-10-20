@@ -18,6 +18,8 @@ function PromoItem({}: Props) {
   const handleChangeAgree = () => {
     setIsAgree((prev) => !prev);
   };
+  const isValidate = isAgree && phone.length === 10;
+  console.log(isValidate);
   return (
     <div className=" flex justify-center items-center px-12 py-[72px] h-full">
       <div className=" flex flex-col justify-between items-center text-center h-full">
@@ -32,7 +34,7 @@ function PromoItem({}: Props) {
         />
         <button
           className="col-span-2 uppercase border-2 border-black  px-5 py-3 disabled:text-[#4E4E4E] disabled:border-[#4E4E4E] duration-300"
-          disabled={phone.length < 10}
+          disabled={!isValidate}
         >
           Подтвердить номер
         </button>
