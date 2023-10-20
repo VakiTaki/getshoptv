@@ -11,13 +11,43 @@ function Promo({ isShow, setIsShowPromo }: Props) {
   console.log(activeIndex);
   const handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === "ArrowLeft" && activeIndex > 0) {
-      setActiveIndex(activeIndex - 1); // Переключение на предыдущую клавишу при нажатии влево
+      if (activeIndex === 13) {
+        setActiveIndex(4);
+      } else {
+        setActiveIndex(activeIndex - 1);
+      }
     } else if (event.key === "ArrowRight" && activeIndex < buttonsCount - 1) {
-      setActiveIndex(activeIndex + 1); // Переключение на следующую клавишу при нажатии вправо
+      if (
+        activeIndex === 2 ||
+        activeIndex === 5 ||
+        activeIndex === 8 ||
+        activeIndex >= 10
+      ) {
+        setActiveIndex(13);
+      } else {
+        setActiveIndex(activeIndex + 1);
+      }
     } else if (event.key === "ArrowUp" && activeIndex > 0) {
-      setActiveIndex(activeIndex - 3);
+      if (activeIndex > 2 && activeIndex < 9) {
+        setActiveIndex(activeIndex - 3);
+      } else {
+        if (activeIndex === 10) {
+          setActiveIndex(activeIndex - 2);
+        } else {
+          setActiveIndex(activeIndex - 1);
+        }
+      }
     } else if (event.key === "ArrowDown" && activeIndex < buttonsCount - 1) {
-      setActiveIndex(activeIndex + 3);
+      if (activeIndex < 8) {
+        setActiveIndex(activeIndex + 3);
+      } else {
+        if (activeIndex == 8) {
+          setActiveIndex(activeIndex + 2);
+        } else if (activeIndex === 12) {
+        } else {
+          setActiveIndex(activeIndex + 1);
+        }
+      }
     }
   };
   useEffect(() => {
