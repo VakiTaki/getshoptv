@@ -4,6 +4,7 @@ import qr from "../../images/qr.svg";
 import final from "../../images/final.svg";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
+  changeIsAgree,
   changeIsSubmit,
   changedActiveIndex,
   changedIsShowPromo,
@@ -12,6 +13,7 @@ import {
   getIsShowPromo,
   getIsSubmit,
   getIsValid,
+  phoneChanged,
 } from "../../store/slices/appSlice";
 import PromoItem from "./promoItem";
 
@@ -22,7 +24,6 @@ function Promo() {
   const activeIndex = useAppSelector(getActiveIndex());
   const isValid = useAppSelector(getIsValid());
   const buttonsCount = 14;
-  console.log(activeIndex);
   const handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === "ArrowLeft" && activeIndex > 0) {
       if (activeIndex === 13) {
@@ -63,16 +64,31 @@ function Promo() {
         }
       }
     } else if (event.key === "Enter") {
-      if (activeIndex === 12) {
-        if (isValid) dispatch(changeIsSubmit());
-      } else if (activeIndex === 13) {
-        handleClose();
+      if (activeIndex >= 0 && activeIndex < 9) {
+        dispatch(phoneChanged((activeIndex + 1).toString()));
+      } else if (activeIndex === 10) {
+        dispatch(phoneChanged("0"));
+      } else if (activeIndex === 9) {
+        dispatch(phoneChanged("backspace"));
+      } else {
+        switch (activeIndex) {
+          case 11:
+            dispatch(changeIsAgree());
+            break;
+          case 12:
+            if (isValid) dispatch(changeIsSubmit());
+            break;
+          case 13:
+            handleClose();
+            break;
+          default:
+            break;
+        }
       }
     }
   };
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
-
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
