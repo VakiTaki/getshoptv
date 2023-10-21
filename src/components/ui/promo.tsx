@@ -7,32 +7,66 @@ import {
   changeIsAgree,
   changeIsSubmit,
   changedActiveIndex,
+  changedIsPhoneValid,
   changedIsShowPromo,
   clearActiveIndex,
   getActiveIndex,
   getIsShowPromo,
   getIsSubmit,
   getIsValid,
+  getPhone,
   phoneChanged,
 } from "../../store/slices/appSlice";
 import PromoItem from "./promoItem";
+import { validatePhoneNumber } from "../../service/validateNumber";
+
+const keybordButtons = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "Backspace",
+];
 
 function Promo() {
   const dispatch = useAppDispatch();
   const isSubmit = useAppSelector(getIsSubmit());
   const isShowBanner = useAppSelector(getIsShowPromo());
   const activeIndex = useAppSelector(getActiveIndex());
+  const phone = useAppSelector(getPhone());
   const isValid = useAppSelector(getIsValid());
   const buttonsCount = 14;
+
+  const handleSubmit = async () => {
+    const result = await validatePhoneNumber(phone);
+    dispatch(changedIsPhoneValid(result));
+    if (result) {
+      dispatch(changeIsSubmit());
+    }
+  };
+  //Функция обработки нажатия клавиш
   const handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === "ArrowLeft" && activeIndex > 0) {
+    if (keybordButtons.includes(event.key)) {
+      dispatch(phoneChanged(event.key.toLowerCase()));
+      setDefaultActiveIndex();
+    } else if (activeIndex < 0) {
+      setDefaultActiveIndex();
+    } else if (event.key === "ArrowLeft" && activeIndex > 0) {
       if (activeIndex === 13) {
         dispatch(changedActiveIndex(4));
       } else {
         dispatch(changedActiveIndex(activeIndex - 1));
       }
     } else if (event.key === "ArrowRight" && activeIndex < buttonsCount - 1) {
-      if (
+      if (activeIndex < 0) {
+        setDefaultActiveIndex();
+      } else if (
         activeIndex === 2 ||
         activeIndex === 5 ||
         activeIndex === 8 ||
@@ -76,7 +110,7 @@ function Promo() {
             dispatch(changeIsAgree());
             break;
           case 12:
-            if (isValid) dispatch(changeIsSubmit());
+            handleSubmit();
             break;
           case 13:
             handleClose();
@@ -86,6 +120,9 @@ function Promo() {
         }
       }
     }
+  };
+  const setDefaultActiveIndex = () => {
+    dispatch(changedActiveIndex(4));
   };
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);

@@ -1,19 +1,25 @@
 import { useState, useEffect } from "react";
 import banner from "../../images/banner.svg";
 import {
+  changedActiveIndex,
   changedIsShowPromo,
   getIsShowPromo,
+  getIsStartPlay,
 } from "../../store/slices/appSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 function Banner() {
   const dispatch = useAppDispatch();
   const isShowBanner = useAppSelector(getIsShowPromo());
+  const isStartPlay = useAppSelector(getIsStartPlay());
   const [showBanner, setShowBanner] = useState(false);
   const [isStart, setIsStart] = useState(false);
   const handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === "Enter") {
-      if (showBanner) handleOpen();
+      if (showBanner) {
+        handleOpen();
+        dispatch(changedActiveIndex(4));
+      }
     }
   };
   useEffect(() => {
@@ -24,7 +30,7 @@ function Banner() {
     };
   }, [showBanner]);
   useEffect(() => {
-    if (!isStart && !isShowBanner) {
+    if (!isStart && !isShowBanner && isStartPlay) {
       const timeoutId = setTimeout(() => {
         setIsStart(true);
         setShowBanner(true);
@@ -33,7 +39,7 @@ function Banner() {
         clearTimeout(timeoutId);
       };
     }
-  }, [isShowBanner, isStart]);
+  }, [isShowBanner, isStart, isStartPlay]);
 
   useEffect(() => {
     if (!isShowBanner && isStart) {

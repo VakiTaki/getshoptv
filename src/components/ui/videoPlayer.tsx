@@ -1,9 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import YouTube, { YouTubeProps, YouTubePlayer } from "react-youtube";
-import { useAppSelector } from "../../store/hooks";
-import { getIsShowPromo } from "../../store/slices/appSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  changedIsStartPlay,
+  getIsShowPromo,
+} from "../../store/slices/appSlice";
 
 function VideoPlayer() {
+  const dispatch = useAppDispatch();
   const videoId = "M7FIvfx5J10?";
   const playerRef = useRef<YouTubePlayer | null>(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -11,7 +15,9 @@ function VideoPlayer() {
 
   useEffect(() => {
     setTimeout(() => {
-      if (isLoaded) playVideo();
+      if (isLoaded) {
+        playVideo();
+      }
     }, 0);
   }, [isLoaded]);
 
@@ -28,18 +34,18 @@ function VideoPlayer() {
     setIsLoaded(true);
   };
   const onStateChange: YouTubeProps["onStateChange"] = (event) => {
-    // console.log(event);
+    if (event.data === 1) {
+      dispatch(changedIsStartPlay());
+    }
   };
 
   const playVideo = () => {
-    console.log("play");
     if (playerRef.current) {
       playerRef.current.playVideo();
     }
   };
 
   const pauseVideo = () => {
-    console.log("pause");
     if (playerRef.current) {
       playerRef.current.pauseVideo();
     }

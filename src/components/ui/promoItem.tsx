@@ -5,6 +5,7 @@ import {
   changeIsAgree,
   changeIsSubmit,
   changedActiveIndex,
+  changedIsPhoneValid,
   changedIsValid,
   clearActiveIndex,
   getActiveIndex,
@@ -14,6 +15,7 @@ import {
 } from "../../store/slices/appSlice";
 import { useEffect } from "react";
 import PhoneInput from "./phoneInput";
+import { validatePhoneNumber } from "../../service/validateNumber";
 
 function PromoItem() {
   const dispatch = useAppDispatch();
@@ -53,8 +55,14 @@ function PromoItem() {
             dispatch(changedActiveIndex(12));
           }}
           onMouseLeave={() => dispatch(clearActiveIndex())}
-          onClick={() => {
-            if (isValid) dispatch(changeIsSubmit());
+          onClick={async () => {
+            if (isValid) {
+              const result = await validatePhoneNumber(phone);
+              dispatch(changedIsPhoneValid(result));
+              if (result) {
+                dispatch(changeIsSubmit());
+              }
+            }
           }}
         >
           Подтвердить номер
