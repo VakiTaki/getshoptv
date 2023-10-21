@@ -1,17 +1,13 @@
-import { useState } from "react";
-import Banner from "../banner";
-import Promo from "../promo";
-import VideoPlayer from "../videoPlayer";
+import Banner from "../ui/banner";
+import Promo from "../ui/promo";
+import VideoPlayer from "../ui/videoPlayer";
 
-type Props = {};
-
-function MainPage({}: Props) {
-  const [isShowPromo, setIsShowPromo] = useState<boolean>(false);
+function MainPage() {
   return (
     <div className=" relative w-[1280px] h-[720px]  shadow-sm shadow-white overflow-hidden  ">
       <VideoPlayer />
-      <Banner isShow={isShowPromo} setIsShowPromo={setIsShowPromo} />
-      <Promo isShow={isShowPromo} setIsShowPromo={setIsShowPromo} />
+      <Banner />
+      <Promo />
     </div>
   );
 }

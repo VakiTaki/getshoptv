@@ -1,3 +1,4 @@
+import withRedux from "./components/hoc/withRedux";
 import MainPage from "./components/layouts/mainPage";
 import "./index.css";
 
@@ -8,5 +9,5 @@ function App() {
     </div>
   );
 }
-
-export default App;
+const AppWithStore = withRedux(App);
+export default AppWithStore;

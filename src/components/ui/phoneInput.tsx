@@ -1,8 +1,8 @@
-import React from "react";
+import { useSelector } from "react-redux";
+import { getPhone } from "../../store/slices/appSlice";
 
-type Props = { phone: string };
-
-function PhoneInput({ phone }: Props) {
+function PhoneInput() {
+  const phone = useSelector(getPhone());
   let formattedText = "+7(___)___-__-__";
   for (let i = 0; i < phone.length; i++) {
     formattedText = formattedText.replace("_", phone[i]);

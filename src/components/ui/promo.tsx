@@ -1,20 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import qr from "../images/qr.svg";
+import qr from "../../images/qr.svg";
+import final from "../../images/final.svg";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  changeIsSubmit,
+  changedActiveIndex,
+  changedIsShowPromo,
+  clearActiveIndex,
+  getActiveIndex,
+  getIsShowPromo,
+  getIsSubmit,
+  getIsValid,
+} from "../../store/slices/appSlice";
 import PromoItem from "./promoItem";
 
-type Props = { isShow: boolean; setIsShowPromo: (b: boolean) => void };
-
-function Promo({ isShow, setIsShowPromo }: Props) {
+function Promo() {
+  const dispatch = useAppDispatch();
+  const isSubmit = useAppSelector(getIsSubmit());
+  const isShowBanner = useAppSelector(getIsShowPromo());
+  const activeIndex = useAppSelector(getActiveIndex());
+  const isValid = useAppSelector(getIsValid());
   const buttonsCount = 14;
-  const [activeIndex, setActiveIndex] = useState<number>(0);
   console.log(activeIndex);
   const handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === "ArrowLeft" && activeIndex > 0) {
       if (activeIndex === 13) {
-        setActiveIndex(4);
+        dispatch(changedActiveIndex(4));
       } else {
-        setActiveIndex(activeIndex - 1);
+        dispatch(changedActiveIndex(activeIndex - 1));
       }
     } else if (event.key === "ArrowRight" && activeIndex < buttonsCount - 1) {
       if (
@@ -23,30 +37,36 @@ function Promo({ isShow, setIsShowPromo }: Props) {
         activeIndex === 8 ||
         activeIndex >= 10
       ) {
-        setActiveIndex(13);
+        dispatch(changedActiveIndex(13));
       } else {
-        setActiveIndex(activeIndex + 1);
+        dispatch(changedActiveIndex(activeIndex + 1));
       }
     } else if (event.key === "ArrowUp" && activeIndex > 0) {
       if (activeIndex > 2 && activeIndex < 9) {
-        setActiveIndex(activeIndex - 3);
+        dispatch(changedActiveIndex(activeIndex - 3));
       } else {
         if (activeIndex === 10) {
-          setActiveIndex(activeIndex - 2);
+          dispatch(changedActiveIndex(activeIndex - 2));
         } else {
-          setActiveIndex(activeIndex - 1);
+          dispatch(changedActiveIndex(activeIndex - 1));
         }
       }
     } else if (event.key === "ArrowDown" && activeIndex < buttonsCount - 1) {
       if (activeIndex < 8) {
-        setActiveIndex(activeIndex + 3);
+        dispatch(changedActiveIndex(activeIndex + 3));
       } else {
-        if (activeIndex == 8) {
-          setActiveIndex(activeIndex + 2);
+        if (activeIndex === 8) {
+          dispatch(changedActiveIndex(activeIndex + 2));
         } else if (activeIndex === 12) {
         } else {
-          setActiveIndex(activeIndex + 1);
+          dispatch(changedActiveIndex(activeIndex + 1));
         }
+      }
+    } else if (event.key === "Enter") {
+      if (activeIndex === 12) {
+        if (isValid) dispatch(changeIsSubmit());
+      } else if (activeIndex === 13) {
+        handleClose();
       }
     }
   };
@@ -58,7 +78,7 @@ function Promo({ isShow, setIsShowPromo }: Props) {
     };
   }, [activeIndex]);
   const handleClose = () => {
-    setIsShowPromo(false);
+    dispatch(changedIsShowPromo(false));
   };
   return (
     <>
@@ -66,17 +86,25 @@ function Promo({ isShow, setIsShowPromo }: Props) {
         <div
           className={
             " absolute top-0  bg-[#86D3F4] w-[30%] h-full  transition-all duration-1000" +
-            (isShow ? " left-0 " : " -left-[200%] invisible  ")
+            (isShowBanner ? " left-0 " : " -left-[200%] invisible  ")
           }
         >
-          <PromoItem activeIndex={activeIndex} />
+          {isSubmit ? (
+            <div className="flex justify-center items-center px-12 py-[72px] h-full">
+              <img src={final} className="" alt="Заявка принята" />
+            </div>
+          ) : (
+            <PromoItem />
+          )}
         </div>
         <div
           className={
             " absolute  right-0 bg-white w-[88px] h-[52px] mt-5 mr-5 flex justify-center items-center hover:opacity-70  shadow-md transition-all duration-1000  " +
-            (isShow ? " top-0 " : " -top-[200%] invisible  ") +
+            (isShowBanner ? " top-0 " : " -top-[200%] invisible  ") +
             (activeIndex === 13 ? " active_button " : " ")
           }
+          onMouseEnter={() => dispatch(changedActiveIndex(13))}
+          onMouseLeave={() => dispatch(clearActiveIndex())}
           onClick={handleClose}
         >
           <XMarkIcon className=" h-6 w-6  " />
@@ -84,7 +112,7 @@ function Promo({ isShow, setIsShowPromo }: Props) {
         <div
           className={
             " absolute  bottom-[40px] w-[300px]  transition-all duration-1000   " +
-            (isShow ? " right-[40px] " : " -right-[200%] invisible ")
+            (isShowBanner ? " right-[40px] " : " -right-[200%] invisible ")
           }
         >
           <img src={qr} alt="Баннер" className="   object-contain" />

@@ -1,34 +1,42 @@
-import React, { useState } from "react";
 import OnScreenKeyboard from "./keyboard/onScreenKeyboard";
+import CustomCheckbox from "./form /customCheckbox";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  changeIsAgree,
+  changeIsSubmit,
+  changedActiveIndex,
+  changedIsValid,
+  clearActiveIndex,
+  getActiveIndex,
+  getIsAgree,
+  getIsValid,
+  getPhone,
+} from "../../store/slices/appSlice";
+import { useEffect } from "react";
 import PhoneInput from "./phoneInput";
-import CustomCheckbox from "./ui/form /customCheckbox";
 
-type Props = { activeIndex: number };
+function PromoItem() {
+  const dispatch = useAppDispatch();
+  const isAgree = useAppSelector(getIsAgree());
+  const phone = useAppSelector(getPhone());
+  const activeIndex = useAppSelector(getActiveIndex());
+  const isValid = useAppSelector(getIsValid());
 
-function PromoItem({ activeIndex }: Props) {
-  const [phone, setPhone] = useState<string>("");
-  const [isAgree, setIsAgree] = useState<boolean>(false);
-  const handleChangeNumber = (target: string) => {
-    if (target === "backspace") {
-      setPhone((prev) => prev.slice(0, -1));
-    } else {
-      if (phone.length < 10) setPhone((prev) => prev + target);
-    }
-  };
   const handleChangeAgree = () => {
-    setIsAgree((prev) => !prev);
+    dispatch(changeIsAgree());
   };
-  const isValidate = isAgree && phone.length === 10;
+
+  useEffect(() => {
+    dispatch(changedIsValid(isAgree && phone.length === 10));
+  }, [isAgree, phone]);
+
   return (
     <div className=" flex justify-center items-center px-12 py-[72px] h-full">
       <div className=" flex flex-col justify-between items-center text-center h-full">
         <h2>Введите ваш номер мобильного телефона</h2>
-        <PhoneInput phone={phone} />
+        <PhoneInput />
         <span>и с Вами свяжется наш менеждер для дальнейшей консультации</span>
-        <OnScreenKeyboard
-          onChangeNumber={handleChangeNumber}
-          activeIndex={activeIndex}
-        />
+        <OnScreenKeyboard />
         <CustomCheckbox
           value={isAgree}
           label={"Согласие на обработку персональных данных"}
@@ -40,7 +48,14 @@ function PromoItem({ activeIndex }: Props) {
             "col-span-2 uppercase border-2 border-black  px-5 py-3 disabled:text-[#4E4E4E] disabled:border-[#4E4E4E] duration-300" +
             (activeIndex === 12 ? " active_button" : " ")
           }
-          disabled={!isValidate}
+          disabled={!isValid}
+          onMouseEnter={() => {
+            dispatch(changedActiveIndex(12));
+          }}
+          onMouseLeave={() => dispatch(clearActiveIndex())}
+          onClick={() => {
+            if (isValid) dispatch(changeIsSubmit());
+          }}
         >
           Подтвердить номер
         </button>
