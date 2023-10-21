@@ -1,23 +1,35 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import YouTube, { YouTubeProps, YouTubePlayer } from "react-youtube";
+import { useAppSelector } from "../../store/hooks";
+import { getIsShowPromo } from "../../store/slices/appSlice";
 
 function VideoPlayer() {
-  const [videoId, setVideoId] = useState<string>("M7FIvfx5J10?");
+  const videoId = "M7FIvfx5J10?";
   const playerRef = useRef<YouTubePlayer | null>(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  //   useEffect(() => {
-  //     if (isLoaded) playVideo();
-  //   }, [isLoaded]);
+  const isShowBanner = useAppSelector(getIsShowPromo());
 
-  setTimeout(() => {
-    playVideo();
-  }, 1000);
+  useEffect(() => {
+    setTimeout(() => {
+      if (isLoaded) playVideo();
+    }, 0);
+  }, [isLoaded]);
+
+  useEffect(() => {
+    if (isShowBanner) {
+      pauseVideo();
+    } else {
+      playVideo();
+    }
+  }, [isShowBanner]);
+
   const onReady: YouTubeProps["onReady"] = (event) => {
-    console.log(event);
     playerRef.current = event.target;
     setIsLoaded(true);
   };
-  const onStateChange: YouTubeProps["onStateChange"] = (event) => {};
+  const onStateChange: YouTubeProps["onStateChange"] = (event) => {
+    // console.log(event);
+  };
 
   const playVideo = () => {
     console.log("play");
@@ -55,16 +67,9 @@ function VideoPlayer() {
         videoId={videoId}
         opts={opts}
         onReady={onReady}
-        onStateChange={onStateChange}
-        onPause={playVideo}
         onEnd={playVideo}
+        onStateChange={onStateChange}
       />
-      {isLoaded && (
-        <>
-          <button onClick={playVideo}>Play</button>
-          <button onClick={pauseVideo}>Pause</button>
-        </>
-      )}
     </div>
   );
 }
