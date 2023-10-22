@@ -41,7 +41,6 @@ function Promo() {
   const activeIndex = useAppSelector(getActiveIndex());
   const phone = useAppSelector(getPhone());
   const isValid = useAppSelector(getIsValid());
-  console.log(isValid);
   const buttonsCount = 14;
 
   const handleSubmit = async () => {
@@ -100,7 +99,6 @@ function Promo() {
         } else if (activeIndex === 9) {
           dispatch(changedActiveIndex(activeIndex + 2));
         } else if (activeIndex === 11) {
-          console.log(activeIndex, isValid);
           if (isValid) dispatch(changedActiveIndex(activeIndex + 1));
         } else if (activeIndex === 12) {
         } else {
