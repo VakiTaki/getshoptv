@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../index";
+import { stat } from "fs";
 
 interface IAppStore {
   phone: string;
@@ -27,11 +28,15 @@ const appSlice = createSlice({
   initialState,
   reducers: {
     phoneChanged(state, action: PayloadAction<string>) {
-      state.isPhoneValid = initialState.isPhoneValid;
       if (action.payload === "backspace") {
-        if (state.phone) state.phone = state.phone.slice(0, -1);
+        if (state.phone) {
+          state.phone = state.phone.slice(0, -1);
+          state.isPhoneValid = initialState.isPhoneValid;
+        }
       } else {
-        if (state.phone.length < 10) state.phone = state.phone + action.payload;
+        if (state.phone.length < 10) {
+          state.phone = state.phone + action.payload;
+        }
       }
     },
     changedIsShowPromo(state, action: PayloadAction<boolean>) {
@@ -57,6 +62,7 @@ const appSlice = createSlice({
     },
     changedIsPhoneValid(state, action: PayloadAction<boolean>) {
       state.isPhoneValid = action.payload;
+      state.activeIndex = 9;
     },
   },
 });

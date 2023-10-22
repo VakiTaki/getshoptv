@@ -41,6 +41,7 @@ function Promo() {
   const activeIndex = useAppSelector(getActiveIndex());
   const phone = useAppSelector(getPhone());
   const isValid = useAppSelector(getIsValid());
+  console.log(isValid);
   const buttonsCount = 14;
 
   const handleSubmit = async () => {
@@ -79,6 +80,8 @@ function Promo() {
     } else if (event.key === "ArrowUp" && activeIndex > 0) {
       if (activeIndex > 2 && activeIndex < 9) {
         dispatch(changedActiveIndex(activeIndex - 3));
+      } else if (activeIndex === 9) {
+        dispatch(changedActiveIndex(7));
       } else {
         if (activeIndex === 10) {
           dispatch(changedActiveIndex(activeIndex - 2));
@@ -87,11 +90,18 @@ function Promo() {
         }
       }
     } else if (event.key === "ArrowDown" && activeIndex < buttonsCount - 1) {
-      if (activeIndex < 8) {
+      if (activeIndex < 7) {
         dispatch(changedActiveIndex(activeIndex + 3));
+      } else if (activeIndex === 7) {
+        dispatch(changedActiveIndex(activeIndex + 2));
       } else {
         if (activeIndex === 8) {
           dispatch(changedActiveIndex(activeIndex + 2));
+        } else if (activeIndex === 9) {
+          dispatch(changedActiveIndex(activeIndex + 2));
+        } else if (activeIndex === 11) {
+          console.log(activeIndex, isValid);
+          if (isValid) dispatch(changedActiveIndex(activeIndex + 1));
         } else if (activeIndex === 12) {
         } else {
           dispatch(changedActiveIndex(activeIndex + 1));
@@ -110,7 +120,7 @@ function Promo() {
             dispatch(changeIsAgree());
             break;
           case 12:
-            handleSubmit();
+            if (isValid) handleSubmit();
             break;
           case 13:
             handleClose();
@@ -129,7 +139,7 @@ function Promo() {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [activeIndex]);
+  }, [activeIndex, isValid]);
   const handleClose = () => {
     dispatch(changedIsShowPromo(false));
   };

@@ -10,6 +10,7 @@ import {
   clearActiveIndex,
   getActiveIndex,
   getIsAgree,
+  getIsPhoneValid,
   getIsValid,
   getPhone,
 } from "../../store/slices/appSlice";
@@ -23,6 +24,7 @@ function PromoItem() {
   const phone = useAppSelector(getPhone());
   const activeIndex = useAppSelector(getActiveIndex());
   const isValid = useAppSelector(getIsValid());
+  const isPhoneValid = useAppSelector(getIsPhoneValid());
 
   const handleChangeAgree = () => {
     dispatch(changeIsAgree());
@@ -33,21 +35,30 @@ function PromoItem() {
   }, [isAgree, phone]);
 
   return (
-    <div className=" flex justify-center items-center px-12 py-[72px] h-full">
-      <div className=" flex flex-col justify-between items-center text-center h-full">
+    <div className=" flex justify-center items-center px-12 py-[72px] h-full w-full">
+      <div className=" flex flex-col justify-between items-center text-center h-full w-full">
         <h2>Введите ваш номер мобильного телефона</h2>
         <PhoneInput />
         <span>и с Вами свяжется наш менеждер для дальнейшей консультации</span>
         <OnScreenKeyboard />
-        <CustomCheckbox
-          value={isAgree}
-          label={"Согласие на обработку персональных данных"}
-          onChange={handleChangeAgree}
-          isActive={activeIndex === 11}
-        />
+        <div className=" w-full flex justify-center items-center h-10">
+          {isPhoneValid ? (
+            <CustomCheckbox
+              value={isAgree}
+              label={"Согласие на обработку персональных данных"}
+              onChange={handleChangeAgree}
+              isActive={activeIndex === 11}
+            />
+          ) : (
+            <span className=" uppercase text-[#EA0000]">
+              Неверно введён номер
+            </span>
+          )}
+        </div>
+
         <button
           className={
-            "col-span-2 uppercase border-2 border-black  px-5 py-3 disabled:text-[#4E4E4E] disabled:border-[#4E4E4E] duration-300" +
+            "col-span-2 uppercase border-2 border-black  px-5 py-3 disabled:text-[#4E4E4E] disabled:border-[#4E4E4E] duration-300 w-full" +
             (activeIndex === 12 ? " active_button" : " ")
           }
           disabled={!isValid}

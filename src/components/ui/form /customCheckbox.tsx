@@ -29,8 +29,8 @@ function CustomCheckbox({ value, label, onChange, isActive }: Props) {
       </div>
       <span
         className={
-          " ml-2  text-sm    text-left" +
-          (isActive ? " text-black" : " text-[#565656]")
+          " ml-2  text-sm    text-left duration-300 " +
+          (isActive ? " text-black " : " text-[#565656]")
         }
       >
         {label}

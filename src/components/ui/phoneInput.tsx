@@ -11,8 +11,8 @@ function PhoneInput() {
   return (
     <span
       className={
-        " font-bold text-[28px] " +
-        (isPhoneValid ? " text-black " : " text-red-500 ")
+        " font-bold text-[28px] font-robotoMono " +
+        (isPhoneValid ? " text-black " : " text-[#EA0000] ")
       }
     >
       {formattedText}

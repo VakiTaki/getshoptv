@@ -15,7 +15,7 @@ function OnScreenKeyboard() {
     dispatch(phoneChanged(label));
   };
   return (
-    <div>
+    <div className=" w-full">
       <div className=" grid grid-cols-3 w-full gap-2.5 ">
         {keys.map((key, ind) => (
           <Key
@@ -28,7 +28,7 @@ function OnScreenKeyboard() {
         ))}
         <button
           className={
-            "col-span-2 uppercase border-2 border-black " +
+            "col-span-2 uppercase border-2 border-black  duration-300 " +
             (activeIndex === 9 ? " active_button" : " ")
           }
           onClick={() => handleKeyClick("backspace")}

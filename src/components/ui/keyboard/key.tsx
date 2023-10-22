@@ -17,7 +17,7 @@ const Key: React.FC<KeyProps> = ({ label, onClick, isActive, index }) => {
   return (
     <button
       className={
-        "  border-2 border-black px-[30px] py-3" +
+        "  border-2 border-black  px-[30px] py-3 duration-300 " +
         (isActive ? " active_button " : " ")
       }
       onClick={() => onClick(label)}
