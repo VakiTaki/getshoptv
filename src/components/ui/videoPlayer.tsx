@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import YouTube, { YouTubeProps, YouTubePlayer } from "react-youtube";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
@@ -8,18 +8,21 @@ import {
 
 function VideoPlayer() {
   const dispatch = useAppDispatch();
-  const videoId = "M7FIvfx5J10?";
+  //Здесь исправил ID видео
+  const videoId = "M7FIvfx5J10";
   const playerRef = useRef<YouTubePlayer | null>(null);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  // const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const isShowBanner = useAppSelector(getIsShowPromo());
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (isLoaded) {
-        playVideo();
-      }
-    }, 0);
-  }, [isLoaded]);
+  //Костыль для Chrome, он блокирует автовоспроизведение при перезагрузке страницы, в Safari все ок, именно поэтому и звук офф
+  //На самом деле я понял почему так было, это моя маленькая неточность, теперь он не нужен и статус тоже закометил
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (isLoaded) {
+  //       playVideo();
+  //     }
+  //   }, 0);
+  // }, [isLoaded]);
 
   useEffect(() => {
     if (isShowBanner) {
@@ -31,7 +34,7 @@ function VideoPlayer() {
 
   const onReady: YouTubeProps["onReady"] = (event) => {
     playerRef.current = event.target;
-    setIsLoaded(true);
+    // setIsLoaded(true);
   };
   const onStateChange: YouTubeProps["onStateChange"] = (event) => {
     if (event.data === 1) {
