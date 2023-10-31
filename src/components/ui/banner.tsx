@@ -10,44 +10,51 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 function Banner() {
   const dispatch = useAppDispatch();
-  const isShowBanner = useAppSelector(getIsShowPromo());
+  //isShowBanner === isShowPromo
+  const isShowPromo = useAppSelector(getIsShowPromo());
+  //Триггер на начало воспроизведения
   const isStartPlay = useAppSelector(getIsStartPlay());
-  const [showBanner, setShowBanner] = useState(false);
-  const [isStart, setIsStart] = useState(false);
+  //Состояние для отображения баннера которое зависит от isStartPlay, isShowPromo, isStart
+  const [isShowBanner, setIsShowBanner] = useState<boolean>(false);
+  //Триггер на первый запуск
+  const [isStart, setIsStart] = useState<boolean>(true);
+
   const handleKeyPress = (event: KeyboardEvent) => {
+    console.log(event.key);
     if (event.key === "Enter") {
-      if (showBanner) {
+      if (isShowBanner) {
         handleOpen();
         dispatch(changedActiveIndex(4));
       }
     }
   };
+
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
+    isShowBanner
+      ? window.addEventListener("keydown", handleKeyPress)
+      : window.removeEventListener("keydown", handleKeyPress);
 
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [showBanner]);
-  useEffect(() => {
-    if (!isStart && !isShowBanner && isStartPlay) {
-      const timeoutId = setTimeout(() => {
-        setIsStart(true);
-        setShowBanner(true);
-      }, 5000);
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }
-  }, [isShowBanner, isStart, isStartPlay]);
+  }, [isShowBanner]);
 
+  //Таймаут на начало воспроизведения + 5 сек, переписал так проще для понимания
   useEffect(() => {
-    if (!isShowBanner && isStart) {
-      setShowBanner(true);
+    if (isStart) {
+      if (!isShowPromo && isStartPlay) {
+        const timeoutId = setTimeout(() => {
+          setIsStart(false);
+          setIsShowBanner(true);
+        }, 5000);
+        return () => {
+          clearTimeout(timeoutId);
+        };
+      }
     } else {
-      setShowBanner(false);
+      setIsShowBanner(!isShowPromo);
     }
-  }, [isShowBanner, isStart]);
+  }, [isShowPromo, isStart, isStartPlay]);
 
   const handleOpen = () => {
     dispatch(changedIsShowPromo(true));
@@ -57,7 +64,7 @@ function Banner() {
     <div
       className={
         " absolute z-20 bottom-[100px] transition-all duration-1000 cursor-pointer shadow-sm shadow-white   " +
-        (showBanner ? " right-[40px] " : " -right-[200%] invisible ")
+        (isShowBanner ? " right-[40px] " : " -right-[200%] invisible ")
       }
       onClick={handleOpen}
     >
